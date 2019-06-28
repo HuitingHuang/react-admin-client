@@ -1,8 +1,10 @@
 import React,{Component} from 'react'
-import { Form, Icon, Input, Button} from 'antd';
+import { Form, Icon, Input, Button,message} from 'antd';
 import './login.less'
 import logo from './images/logo.png'
 import {reqLogin} from '../../api'
+import storageUtils from '../../utils/storageUtils'
+import memoryUtils from '../../utils/memoryUtils';
 
 const Item = Form.Item;
 
@@ -14,14 +16,40 @@ class Login extends Component{
         e.preventDefault();
 
         //点击登录的时候对所有的表单字段进行校验(统一校验)，因为用户可能不输然后直接点
-        this.props.form.validateFields((err,values) =>{
+        this.props.form.validateFields(async (err,values) =>{
             if(!err){
+                
                 //console.log('submit ajax request',values)
                 //按住ctrl，鼠标hover然后显示函数声明，点击可以跳转在声明它的文件或者alt+<-
 
                 //结构赋值的变量名必须与values对象中的变量名一直，并且也要与接口函数的参数名一致（username and password）
                 const {username,password} = values
-                reqLogin(username,password).then(response =>console.log('成功了',response.data)).catch(error =>{console.log('失败了',error)})
+                //promise方法
+                // reqLogin(username,password).then(response =>console.log('成功了',response.data)).catch(error =>{console.log('失败了',error)})
+
+                //async/await改写(捕获错误已在ajax中完成统一版本，不再需要try/catch)
+                
+                const result = await reqLogin(username,password)
+                // console.log('请求成功',response.data)
+                
+                if(result.status===0){//登录成功
+                    //提示登录成功
+                    message.success('登录成功')
+                    const user = result.data//user信息最好可以变成所有模块都能通用，那就是存到内存中
+                    memoryUtils.user = user
+                    //保存到local中去
+                    storageUtils.saveUser(user)
+
+                    //跳转到管理界面
+                    //this.props.history常用方法：push(),replace(),goback().goback()是回退，push()和replace()的区别：push（）路由是A 跳到B跳到C，回退是由C->B->A,由栈的方式来管理它们，replace（）是多出来的一个D替换掉C，无法再回退到C,这里登录进去以后就不再需要回退到登录界面了
+
+                    //事件回调函数中实现跳转
+                    this.props.history.replace('/')
+                }else{//登录失败
+                    //提示错误信息
+                    message.error(result.message)
+
+                }
             }else{
                 console.log('校验失败！')
             }
@@ -115,3 +143,13 @@ export default WrappedNormalLoginFrom;
 3.点击“登录”时统一校验
 */ 
 /*点击“登录时，还需要验证，验证通过了才发生跳转”*/ 
+
+/*
+async和await
+1.作用？
+简化promise对象的使用，不用再使用then()来指定成功/失败的回调函数；以同步编码（没有回调函数了）方式实现异步流程
+2.哪里写await？
+在返回promise的表达式左侧写await：不想要promise，想要promise异步执行的成功的value数据
+3.哪里写async?
+await所在函数（最近的）定义的左侧
+ */
