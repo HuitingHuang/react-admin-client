@@ -12,7 +12,7 @@ export default class Admin extends Component{
             //自动跳转到登录（在render（）中实现自动跳转）
             return <Redirect to='/login' />//Link标签不会只是跳转不是重定向，重定向之后就不会再执行之后的return
 
-            //刷新之后user对象就消失了，用localStorage可以用来永久存储，sessionStorage关闭浏览器之后信息就消失了
+            //刷新之后内存中user就消失了，用localStorage可以用来永久存储，sessionStorage关闭浏览器之后信息就消失了
         }
         return(
             <div>

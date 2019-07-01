@@ -37,7 +37,7 @@ class Login extends Component{
                     message.success('登录成功')
                     const user = result.data//user信息最好可以变成所有模块都能通用，那就是存到内存中
                     memoryUtils.user = user
-                    //保存到local中去
+                    //保存到local（本地文件）中去，刷新的时候要读取，从入口js文件中读取
                     storageUtils.saveUser(user)
 
                     //跳转到管理界面
@@ -79,6 +79,7 @@ class Login extends Component{
     }
 
     render(){
+        //
         const form = this.props.form;
         const {getFieldDecorator} = form;
         return(
