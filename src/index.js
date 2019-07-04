@@ -8,7 +8,7 @@ import memoryUtils from './utils/memoryUtils';
 import * as serviceWorker from './serviceWorker';
 
 //读取local中保存的user， 关闭浏览器再打开，内存中就没有数据了，所以内存中也要有保存
-const user = storageUtils.getUsers()
+const user = storageUtils.getUser()
 memoryUtils.user = user
 
 ReactDOM.render(<App />, document.getElementById('root'));

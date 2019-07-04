@@ -1,5 +1,3 @@
-import { getSequencer } from "jest-config/build/utils";
-
 /* 进行local数据存储管理的工具模块 */
 /* 统一暴露 */
 const USER_KEY = 'user_key'

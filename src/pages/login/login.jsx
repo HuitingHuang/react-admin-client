@@ -1,10 +1,11 @@
 import React,{Component} from 'react'
 import { Form, Icon, Input, Button,message} from 'antd';
 import './login.less'
-import logo from './images/logo.png'
+import logo from '../../assets/images/logo.png'
 import {reqLogin} from '../../api'
 import storageUtils from '../../utils/storageUtils'
 import memoryUtils from '../../utils/memoryUtils';
+import {Redirect} from 'react-router-dom'
 
 const Item = Form.Item;
 
@@ -79,7 +80,11 @@ class Login extends Component{
     }
 
     render(){
-        //
+        // 如果用户已经登录，自动跳转到管理界面
+        const user = memoryUtils.user
+        if(user && user._id){
+            return <Redirect to ='/' />
+        }
         const form = this.props.form;
         const {getFieldDecorator} = form;
         return(

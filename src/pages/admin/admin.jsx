@@ -1,7 +1,22 @@
 /* 后台管理的路由组件 */
 import React,{Component} from 'react'
-import {Redirect} from 'react-router-dom'
+import {Redirect, Route, Switch} from 'react-router-dom'
 import memoryUtils from '../../utils/memoryUtils'
+import { Layout } from 'antd';
+import LeftNav from '../../components/left-nav'//写index.jsx只需要引入到文件夹就可以了
+import './admin.less'
+import Header from '../../components/header'
+//admin的二级子路由
+import Home from '../home/home'
+import Category from '../category/category'
+import Product from '../product/product'
+import Role from '../role/role'
+import User from '../user/user'
+import Bar from '../charts/bar'
+import Line from '../charts/line'
+import Pie from '../charts/pie'
+
+const { Footer, Sider, Content } = Layout;
 
 export default class Admin extends Component{
     
@@ -15,9 +30,30 @@ export default class Admin extends Component{
             //刷新之后内存中user就消失了，用localStorage可以用来永久存储，sessionStorage关闭浏览器之后信息就消失了
         }
         return(
-            <div>
-                Hello {user.username}
-            </div>
+            <Layout style={{height:'100%'}}>{/* 外面的大括号说明里面是JS代码，里面的大括号说明是JS对象, react会将jsx花括号中的内容转化成js代码*/}
+                <Sider>
+                    <LeftNav />
+                </Sider>
+                <Layout>
+                    <Header />
+                    <Content style={{backgroundColor:'#fff'}}>
+                        <Switch>
+                            <Route path='/home' component={Home} />
+                            <Route path='/home' component={Home}/> 
+                            <Route path='/category' component={Category}/> 
+                            <Route path='/product' component={Product}/> 
+                            <Route path='/role' component={Role}/> 
+                            <Route path='/user' component={User}/> 
+                            <Route path='/charts/bar' component={Bar}/> 
+                            <Route path='/charts/line' component={Line}/> 
+                            <Route path='/charts/pie' component={Pie}/>
+                            {/* 如果一进入admin没有选择具体的组件或者地址写错，就直接跳转到首页 */}
+                            <Redirect to='/home'/>
+                        </Switch>
+                    </Content>
+                    <Footer style={{textAlign:'center',color:'#cccccc'}}>Chrome is recommended to get the best experience</Footer>
+                </Layout>
+            </Layout>
         )
     }
 }
