@@ -1,16 +1,16 @@
 import React, {Component} from 'react'
 import logo from '../../assets/images/logo.png'
 import './index.less'
-import {Link} from 'react-router-dom'
+import {Link,withRouter} from 'react-router-dom'
 import { Menu, Icon, Button } from 'antd';
 import menuList from '../../config/menuConfig';//默认暴露的可以写任意的import名字
 
 const { SubMenu } = Menu;
 /* 左侧导航的组件 */
 
-export default class LeftNav extends Component{
-
-    getMenuNodes = (menuList) => {
+class LeftNav extends Component{
+    /* 使用map()+递归调用动态生成menu */
+    getMenuNodes_map = (menuList) => {
         return menuList.map(item => {
             /* 
                 {
@@ -21,23 +21,110 @@ export default class LeftNav extends Component{
                 }
              */
 
+             /*
+                <SubMenu
+                        key="sub1"
+                        title={
+                        <span>
+                            <Icon type="mail" />
+                            <span>Products</span>
+                        </span>
+                        }
+                    >
+                        <Menu.Item key="/category"></Menu.Item>
+                        <Menu.Item key="/product"></Menu.Item>
+                    </SubMenu>
+              */
             if(!item.children){//如果item.children不存在
                 return(
-                    <Menu.Item key="/home">
-                        <Link to='/home'>
-                            <Icon type="pie-chart" />
-                            <span>Home</span>
+                    <Menu.Item key={item.key}>
+                        <Link to={item.key}>
+                            <Icon type={item.icon} />
+                            <span>{item.title}</span>
                         </Link>
                     </Menu.Item>
                 )
 
             }else {
+                return(
+                    <SubMenu
+                        key={item.key}
+                        title={
+                        <span>
+                            <Icon type={item.icon} />
+                            <span>{item.title}</span>
+                        </span>
+                        }
+                    >
+                        {this.getMenuNodes_map(item.children)}
+                    </SubMenu>
+                )
                 
             }
             
         })
     }
+
+    /* 使用reduce()+递归调用动态生成menu */
+    getMenuNodes = (menuList) => {
+        const path = this.props.location.pathname
+
+        return menuList.reduce((pre,item)=>{//pre上一次统计的结果
+            //向pre中添加<Menu.Item>或<SubMenu>
+            if(!item.children){
+                pre.push((
+                    <Menu.Item key={item.key}>
+                        <Link to={item.key}>
+                            <Icon type={item.icon} />
+                            <span>{item.title}</span>
+                        </Link>
+                    </Menu.Item>
+                ))
+            } else {
+
+                //查找一个与当前请求路径匹配的子Item
+                const cItem = item.children.find(cItem => cItem.key===path)
+                //如果存在，说明当前item的子列表需要打开
+                if(cItem){
+                    this.openKey = item.key;
+                }
+
+                //向pre添加<SubMenu>
+                pre.push((
+                    <SubMenu
+                        key={item.key}
+                        title={
+                        <span>
+                            <Icon type={item.icon} />
+                            <span>{item.title}</span>
+                        </span>
+                        }
+                    >
+                        {this.getMenuNodes(item.children)}
+                    </SubMenu>
+                ))
+            }
+            // console.log('!!!') 会被调用10次
+            return pre
+        },[])//[]是初始值
+    }
+
+    //在第一次render（）之前执行一次
+    //为第一个render（）准备数据（必须同步的）
+    componentWillMount(){
+        this.menuNodes = this.getMenuNodes(menuList)
+    }
+
     render(){
+        
+        //为实现自动选中菜单项：
+        //得到当前请求的路由路径
+
+        //但是本组件不是路由组件，没有history, location和match三个属性
+        const path = this.props.location.pathname
+        //得到需要打开菜单项的key
+        const openKey = this.openKey
+
         return(
             <div className="left-nav">
                 <Link to='/' className='left-nav-header'>
@@ -47,6 +134,9 @@ export default class LeftNav extends Component{
                 <Menu
                     mode="inline"
                     theme="dark"
+                    //defaultSelectedKeys={[path]} //更新以后不会改变
+                    selectedKeys={[path]}
+                    defaultOpenKeys={[openKey]}
                 >
                     {/* <Menu.Item key="/home">
                         <Link to='/home'>
@@ -91,7 +181,7 @@ export default class LeftNav extends Component{
                         </Link>
                     </Menu.Item> */}
                     {
-                        this.getMenuNodes(menuList)
+                        this.menuNodes
                     }
                 </Menu>
             </div>
@@ -99,3 +189,9 @@ export default class LeftNav extends Component{
         )
     }
 }
+/*
+withRouter 高阶组件：
+包装飞路由组件，返回一个新的组件
+新的组件向非路由组件传递3个属性：history/location/match
+ */
+export default withRouter(LeftNav)

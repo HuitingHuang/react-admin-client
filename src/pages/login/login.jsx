@@ -107,8 +107,7 @@ class Login extends Component{
                                     { pattern: /^[a-zA-Z0-9_]+$/,message:'Username could include letters in lowercase or uppercase, digits and underline.'}
                                 ],
                                 initialValue: 'admin'//初始值
-                            }/* 验证规则：配置对象：属性名是 */)
-                            (
+                            }/* 验证规则：配置对象：属性名是 */)(
                                 <Input
                                 prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
                                 placeholder="Username"
