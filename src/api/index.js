@@ -39,7 +39,7 @@ export const reqWeather = (city) => {
     return new Promise((resolve,reject) => {
         const url =`http://api.map.baidu.com/telematics/v3/weather?location=${city}&output=json&ak=3p49MVra6urFRGOT9s8UBWr2`
         //发送jsonp请求
-        jsonp(url, {}, (err,data)=>{
+        jsonp(url, {}, (err,data)=>{//不用axios因为它没有封装jsonp
             // console.log('jsonp()',err,data)
             // 如果成功了
             if(!err && data.status === 'success'){
@@ -54,6 +54,12 @@ export const reqWeather = (city) => {
     })    
 }
 
-reqWeather('福州')
+//获取一级/二级分类的列表
+export const reqCategories = (parentId) => ajax('/manage/category/list',{parentId})
 
+//添加分类
+export const reqAddCategory = (categoryName,parentId) => ajax('/manage/category/add',{categoryName,parentId},'POST')
+
+//更新分类(解构参数)
+export const reqUpdateCategory = ({categoryId,categoryName}) => ajax('/manage/category/update',{categoryId,categoryName},'POST')
 

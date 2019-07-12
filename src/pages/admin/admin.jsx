@@ -37,8 +37,7 @@ export default class Admin extends Component{
                 <Layout>
                     <Header />
                     <Content style={{margin:20,backgroundColor:'#fff'}}>
-                        <Switch>
-                            <Route path='/home' component={Home} />
+                        <Switch>{/* 路由跳转之后，页面刷新，整个组件会重新render，所以路由跳转，header也会被重新render,所以title会随之变化 */}
                             <Route path='/home' component={Home}/> 
                             <Route path='/category' component={Category}/> 
                             <Route path='/product' component={Product}/> 
@@ -47,7 +46,8 @@ export default class Admin extends Component{
                             <Route path='/charts/bar' component={Bar}/> 
                             <Route path='/charts/line' component={Line}/> 
                             <Route path='/charts/pie' component={Pie}/>
-                            {/* 如果一进入admin没有选择具体的组件或者地址写错，就直接跳转到首页 */}
+                            {/* 如果一进入admin没有具体的可匹配的组件或者地址写错，就直接跳转到首页 */}
+                            {/* 这里一进入路径是‘/’,没有匹配的，所以一进来跳转到‘/home’ */}
                             <Redirect to='/home'/>
                         </Switch>
                     </Content>

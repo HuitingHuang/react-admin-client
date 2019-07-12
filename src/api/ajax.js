@@ -12,7 +12,7 @@
 import axios from 'axios'
 import {message} from 'antd'
 
-export default function ajax(url,data={}/* 指定默认值 */,type='GET'){
+export default function ajax(url,data={}/* 指定默认值 */,type='GET'){//形参默认值
     //login.jsx中await后需要的是一个promise，所以这里return一个promise，而promise包裹的是异步调用，其中的axios.get（）本身就是一个promise，也是一个异步调用（The promise object reprensents the eventual completion(or failure)of an asynchronous operation, and its resulting value）
     return new Promise((resolve,reject) => {
         let promise
@@ -44,3 +44,4 @@ export default function ajax(url,data={}/* 指定默认值 */,type='GET'){
 // ajax('/manage/user/add',{username:'Tom',password:'123',phone:'12345678'},'POST').then();
 // /* 每个请求每次请求的时候都需要传入相应的参数，而参数部分很多都是相同的（url，‘post’），为了少写代码，需要创建一个模块包含所有的请求接口 */
 
+//如果是查询数据，get，如果更新后台数据，post；如果更新不需要请求参数，用get

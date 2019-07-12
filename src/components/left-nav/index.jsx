@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import logo from '../../assets/images/logo.png'
 import './index.less'
 import {Link,withRouter} from 'react-router-dom'
-import { Menu, Icon, Button } from 'antd';
+import { Menu, Icon} from 'antd';
 import menuList from '../../config/menuConfig';//默认暴露的可以写任意的import名字
 
 const { SubMenu } = Menu;
@@ -68,7 +68,7 @@ class LeftNav extends Component{
     /* 使用reduce()+递归调用动态生成menu */
     getMenuNodes = (menuList) => {
         const path = this.props.location.pathname
-
+        console.log('path',path)
         return menuList.reduce((pre,item)=>{//pre上一次统计的结果
             //向pre中添加<Menu.Item>或<SubMenu>
             if(!item.children){
@@ -122,6 +122,7 @@ class LeftNav extends Component{
 
         //但是本组件不是路由组件，没有history, location和match三个属性
         const path = this.props.location.pathname
+        console.log('render path',path)
         //得到需要打开菜单项的key
         const openKey = this.openKey
 
@@ -191,7 +192,7 @@ class LeftNav extends Component{
 }
 /*
 withRouter 高阶组件：
-包装飞路由组件，返回一个新的组件
+包装非路由组件，返回一个新的组件
 新的组件向非路由组件传递3个属性：history/location/match
  */
 export default withRouter(LeftNav)
