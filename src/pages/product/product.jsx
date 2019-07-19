@@ -5,6 +5,7 @@ import ProductHome from './home'
 import ProductAddUpdate from './add-update'
 import ProductDetail from './detail'
 
+import './product.less'
 
 /* 二级路由的商品管理 */
 export default class Product extends Component{

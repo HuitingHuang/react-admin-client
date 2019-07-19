@@ -165,7 +165,7 @@ export default class Category extends Component{
         })
     }
     /* 更新分类 */
-    updateCategory =  () =>{
+    updateCategory = () =>{
 
         //进行表单验证，只有通过才处理
         this.form.validateFields(async (err,values)=>{//values：所有表单数据的对象
@@ -192,6 +192,7 @@ export default class Category extends Component{
 
     }
     showUpdate =(category) =>{
+        console.log('category',category)
         //保存分类对象，没必要放到状态里面去
         this.category = category
         //更新状态

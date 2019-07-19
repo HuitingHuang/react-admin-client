@@ -63,3 +63,11 @@ export const reqAddCategory = (categoryName,parentId) => ajax('/manage/category/
 //更新分类(解构参数)
 export const reqUpdateCategory = ({categoryId,categoryName}) => ajax('/manage/category/update',{categoryId,categoryName},'POST')
 
+//获取商品分页列表
+export const reqProducts = (pageNum,pageSize) => ajax('/manage/product/list',{pageNum,pageSize})
+
+// 搜索商品分页列表(根据商品名称/商品描述)
+//searchType：搜索的类型，productName/productDesc
+export const reqSearchProducts = ({pageNum,pageSize,searchName,searchType}) => ajax('/manage/product/search',{pageNum,pageSize,[searchType]:searchName})//让一个变量名的值作为属性名的时候，需要在变量名外加一个中括号
+
+
