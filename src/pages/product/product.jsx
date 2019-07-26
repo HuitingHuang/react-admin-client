@@ -18,6 +18,14 @@ export default class Product extends Component{
                 <Route path='/product/detail' component={ProductDetail} />
                 <Redirect to='/product'/>
             </Switch>
+            /*写法二 */
+            /* 路由是逐层匹配，如果这里的地址是/product/xxx，会匹配到productHome而且它会尝试去匹配productHome的子路由 */
+           /*  <Switch>
+                
+                <Route path='/product/addupdate' component={ProductAddUpdate} />
+                <Route path='/product/detail' component={ProductDetail} />
+                <Route exact path='/product' component={ProductHome} />
+            </Switch> */
         )
     }
 }
